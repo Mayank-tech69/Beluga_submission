@@ -44,15 +44,15 @@ Normalization lowercases, folds accents to ASCII, maps `&` to `and`, standardize
 
 ## Experimental setup
 
-The module includes nine deterministic synthetic cases for close matches, non-matches, reordered tokens, missing fields, accent folding, and an unseen country label. The CLI runs these checks with `python3 src/main.py --synthetic-demo`. Real train/validation splits and F0.5 were not computed because the training files are absent.
+Real train/validation splits and F0.5 were not computed because the training files are absent.
 
 ## Results
 
-No real-data feature matrix, baseline model, feature ranking, or score is available from this checkout. Feature importance remains to be measured by Person C after candidate pairs and training files are supplied. The synthetic demonstration reports feature values only; it is not a performance estimate.
+No real-data feature matrix, baseline model, feature ranking, or score is available from this checkout. Feature importance remains to be measured by Person C after candidate pairs and training files are supplied.
 
 ## Reproducibility
 
-From `code/business_entity_resolution/`, install `requirements.txt` and run the synthetic demo or the real-data command shown in its README. Real-data inputs require the official source TSVs, ground truth for labels, and candidate pairs. The feature output is tab-separated with one row per pair and an `is_match` column when labels are supplied.
+From `code/business_entity_resolution/`, install `requirements.txt` and run the real-data command shown in its README. Inputs require the official source TSVs, ground truth for labels, and candidate pairs. The feature output is tab-separated with one row per pair and an `is_match` column when labels are supplied.
 
 ## Limitations and outstanding work
 

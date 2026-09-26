@@ -8,11 +8,10 @@ The checked-in workspace currently does not contain `dataset/train/` or `dataset
 
 ## Run
 
-From this directory, install pinned dependencies and run the synthetic demonstration:
+From this directory, install the pinned dependencies:
 
 ```bash
 python3 -m pip install -r requirements.txt
-python3 src/main.py --synthetic-demo
 ```
 
 Generate training features (candidate rows may use either one `candidate_entity_id` per row or a comma-separated `candidate_entity_ids` column):
@@ -37,4 +36,4 @@ The TF-IDF vectorizers fit over concatenated source records for each invocation 
 
 ## Limitations and handoff
 
-State-like token overlap is deliberately gazetteer-free and is only a rough overlap signal; no postal format, country, or state list is hardcoded. Postal extraction accepts digit runs of 5–10 digits and may misread other numeric address components. Sparse addresses and transliterations reduce text similarity. Synthetic checks exercise high/low examples, missing values, France as an unseen label, and token-order changes. No real feature importance is claimed because the data and Person C model are unavailable. Blocking, the matching model, validation split, threshold tuning, complete `candidate_pairs.tsv`, `matching_results.tsv`, and final package validation remain upstream/downstream team work and require the missing challenge data and components.
+State-like token overlap is deliberately gazetteer-free and is only a rough overlap signal; no postal format, country, or state list is hardcoded. Postal extraction accepts digit runs of 5–10 digits and may misread other numeric address components. Sparse addresses and transliterations reduce text similarity. No real feature importance is claimed because the data and Person C model are unavailable. Blocking, the matching model, validation split, threshold tuning, complete `candidate_pairs.tsv`, `matching_results.tsv`, and final package validation remain upstream/downstream team work and require the missing challenge data and components.

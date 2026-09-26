@@ -154,36 +154,3 @@ def build_feature_matrix(pairs: pd.DataFrame, source1: pd.DataFrame,
         result["is_match"] = [int(cid in set(truth.get(sid, "").split(",")))
                               for sid, cid in zip(result.source1_entity_id, result.candidate_entity_id)]
     return result
-
-
-def synthetic_smoke_check() -> pd.DataFrame:
-    """Small deterministic feature check without depending on challenge data."""
-    cases = [
-        ("Acme Ltd", "12 Main St, Boston 02110", "US", "ACME Limited", "12 Main Street, Boston 02110", "US", 1),
-        ("Blue River Cafe", "4 Park Rd, Pune 411001", "India", "Blue River Café", "4 Park Road Pune 411001", "India", 1),
-        ("Northstar Systems", "8 Lake Ave, Paris 75001", "France", "North Star System", "8 Lake Avenue Paris 75001", "France", 1),
-        ("Acme Ltd", "12 Main St Boston", "US", "Zenith Motors", "900 Hill Road Austin", "US", 0),
-        ("", "", "US", "", "", "US", 1),
-        ("Mira Foods", "Shop 2 Market Road", "India", "Mira Food", "Market Rd Shop 2", "India", 1),
-        ("Orchid Hotel", "17 River Lane", "France", "Orchid Bakery", "90 Rue Paris", "France", 0),
-        ("Delta Corp", "Building 5 Sector 4", "India", "Delta Corporation", "Bldg 5 Sector 4", "India", 1),
-        ("Sunrise Clinic", None, "US", "Sunrise Clinics", "", "US", 1),
-    ]
-    s1_rows, s2_rows, pair_rows, truth_rows = [], [], [], []
-    for i, (n1, a1, c1, n2, a2, c2, expected) in enumerate(cases):
-        f = compute_features(n1, a1, c1, n2, a2, c2)
-        if expected:
-            assert f["name_token_set_ratio"] >= 0.5 or not normalize_text(n1)
-        else:
-            assert f["name_token_set_ratio"] < 0.9
-        left_id, right_id = f"S1-{i:05d}", f"S2-{i:05d}"
-        s1_rows.append({"entity_id": left_id, "business_name": n1, "business_address": a1,
-                        "country": c1})
-        s2_rows.append({"entity_id": right_id, "business_name": n2, "business_address": a2,
-                        "country": c2})
-        pair_rows.append({"source1_entity_id": left_id, "candidate_entity_ids": right_id})
-        truth_rows.append({"source1_entity_id": left_id,
-                           "matched_entity_ids": right_id if expected else ""})
-    schema = ["entity_id", "business_name", "business_address", "country"]
-    return build_feature_matrix(pd.DataFrame(pair_rows), pd.DataFrame(s1_rows), pd.DataFrame(s2_rows),
-                                pd.DataFrame(columns=schema), pd.DataFrame(truth_rows))
